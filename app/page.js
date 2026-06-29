@@ -23,9 +23,10 @@ useEffect(() => {
   const data = localStorage.getItem("user");
   if (data) {
     const logindata = JSON.parse(data);
-    dispatch(setuser(logindata)); // Yahan Redux state update hoti hai
+    dispatch(setuser(logindata)); 
   }
 }, []);
+console.log("redux state",loginUser)
 
   useEffect(() => {
     const handleProduct = async () => {

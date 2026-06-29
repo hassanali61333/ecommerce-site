@@ -18,7 +18,7 @@ console.log("redx",loginUser)
 useEffect(() => {
   const data = localStorage.getItem("user");
   if (data) {
-    const logindata = JSON.parse(data);
+   const logindata = JSON.parse(data || null);
     dispatch(setuser(logindata)); // Yahan Redux state update hoti hai
   }
 }, []);
