@@ -16,7 +16,7 @@ const dispatch=useDispatch()
     const fetchData = async () => {
       try {
         const res = await getCollection();
-      
+      console.log("collection data", res.data.data)
         setCollections(res.data.data);
         
       } catch (error) {

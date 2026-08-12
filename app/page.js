@@ -1,4 +1,3 @@
-
 "use client"
 import { getProduct, stockDecrease } from "./services/userService";
 import {FaTruck,FaMoneyBillWave,FaHeadphones  } from "react-icons/fa"
@@ -15,6 +14,8 @@ export default function Home() {
 
 const dispatch=useDispatch()
 const [Product,setProduct]=useState([])
+const [loading, setLoading] = useState(true);  
+const [error, setError] = useState(null);      
   const loginUser=useSelector((state)=>state.products.user)
 const router=useRouter()
 
@@ -26,16 +27,20 @@ useEffect(() => {
     dispatch(setuser(logindata)); 
   }
 }, []);
-console.log("redux state",loginUser)
+
 
   useEffect(() => {
     const handleProduct = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const res = await getProduct();
         setProduct(res.data.data)
-        // console.log(res.data.data);
       } catch (err) {
         console.log(err);
+        setError("Products load nahi ho sakay. Dobara try karein.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -60,7 +65,17 @@ const handleClick = async (items) => {
     localStorage.setItem("card", JSON.stringify(stateCard));
 };
 
-
+  // ✅ Simple skeleton card shown while products are loading
+  const ProductSkeleton = () => (
+    <div className="w-[240px] animate-pulse">
+      <div className="h-[300px] w-full rounded-[10px] bg-gray-200" />
+      <div className="space-y-2 bg-white p-4">
+        <div className="h-4 w-3/4 rounded bg-gray-200" />
+        <div className="h-5 w-1/2 rounded bg-gray-200" />
+        <div className="h-8 w-full rounded-lg bg-gray-200 mt-2" />
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -152,7 +167,35 @@ We're here to help
 
 <h1 className="text-[30px] m-6 font-bold">Feature Products</h1>
 
+{/* ✅ Error state */}
+{error && !loading && (
+  <div className="w-full text-center py-10">
+    <p className="text-red-500 font-medium mb-3">{error}</p>
+    <button
+      onClick={() => window.location.reload()}
+      className="px-4 py-2 bg-[rgb(255,136,0)] text-white rounded-[10px] font-semibold"
+    >
+      Reload
+    </button>
+  </div>
+)}
 
+{/* ✅ Loading state — skeleton grid instead of blank screen */}
+{loading && (
+  <div className="w-full grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6 justify-items-center">
+    {Array.from({ length: 8 }).map((_, i) => (
+      <ProductSkeleton key={i} />
+    ))}
+  </div>
+)}
+
+{/* ✅ No products found */}
+{!loading && !error && Product.length === 0 && (
+  <p className="w-full text-center py-10 text-gray-500">No products found.</p>
+)}
+
+{/* ✅ Actual products — only rendered once loading is done */}
+{!loading && !error && Product.length > 0 && (
   <div className="w-full  grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6 justify-items-center">
 
         {Product.map((items)=>(
@@ -190,6 +233,7 @@ We're here to help
         }
 
         </div>
+)}
 
 
       <div className=" bg-[rgb(10,165,106)] text-black py-[50px] text-center rounded-[20px]">

@@ -42,7 +42,7 @@ console.log("onw data", no)
           const res = await getProduct();
           
           setProduct(res.data.data)
-          // console.log(res.data.data)
+         console.log("products",res.data)
         } catch (err) {
           console.log(err);
         }

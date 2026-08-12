@@ -29,6 +29,7 @@ export default function History() {
         try {
           const res = await getHistory(loginUser._id);
           if (res.data.success) {
+            console.log("Order history data:", res.data.data);
             setOrders(res.data.data);
           }
         } catch (err) {
