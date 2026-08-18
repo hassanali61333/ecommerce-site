@@ -28,6 +28,9 @@ useEffect(() => {
   }
 }, []);
 
+console.log("redux state",loginUser)
+console.log("hassan")
+
 
   useEffect(() => {
     const handleProduct = async () => {
