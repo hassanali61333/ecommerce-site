@@ -2,7 +2,7 @@ import axios from "axios"
 
 
 const api= axios.create({
-  baseURL: "my-backend-production-70cd.up.railway.app",
+baseURL: "https://my-backend-production-70cd.up.railway.app/api/users"
   headers  : {"Content-Type" :"application/json"}
 })
 
