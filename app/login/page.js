@@ -23,16 +23,12 @@ export default function Login() {
     try {
       const response = await loginUser({ email, password });
     alert("login sucessfull")
-    console.log("token", response.data);
+    console.log("login data", response.data);
       dispatch(setuser(response.data.data));
       localStorage.setItem("user",JSON.stringify(response.data.data))
       const role = response.data.data.role;
-      console.log(role) 
+      // console.log(role) 
 
-
-     
-
-    
       if (role === "admin") {
         router.push("/admin");
       } else {
