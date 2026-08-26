@@ -31,3 +31,13 @@ export const trackOrder=(id)=> api.get(`/checkStatus/${id}`)
 export const stripePayment=(data)=> api.post("/stripePayment",data)
 export const reviews=(data)=> api.post("/review",data)
 export const getReview=(id)=> api.get(`/getreview/${id}`)
+
+
+
+
+export const subscribeToPush = async (userID, subscription) => {
+  return await api.post("/subscribe", {
+    userID,
+    subscription,
+  });
+};

@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Navbar from "../components/navbar.js";
 import Footer from "../components/footer.js";
+import { subscribeToPush } from "../services/userService.js"; // Import the subscribeToPush function
 
 export default function Login() {
   const [toggle, setToggle] = useState(false);
@@ -17,6 +18,112 @@ export default function Login() {
   const dispatch = useDispatch();
   const router = useRouter();
 
+
+
+const urlBase64ToUint8Array = (base64String) => {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+
+  const base64 = (base64String + padding)
+    .replace(/-/g, "+")
+    .replace(/_/g, "/");
+
+  const rawData = window.atob(base64);
+
+  return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+};
+
+const subscribeAdminToPush = async (userID) => {
+  try {
+    console.log("🔔 Starting push setup...");
+
+    if (!("Notification" in window)) {
+      console.log("❌ Notification not supported");
+      return;
+    }
+
+    if (!("serviceWorker" in navigator)) {
+      console.log("❌ Service Worker not supported");
+      return;
+    }
+
+    if (!("PushManager" in window)) {
+      console.log("❌ PushManager not supported");
+      return;
+    }
+
+    console.log("Current permission:", Notification.permission);
+
+    // Permission
+    let permission = Notification.permission;
+
+    if (permission === "default") {
+      permission = await Notification.requestPermission();
+    }
+
+    console.log("Permission result:", permission);
+
+    if (permission !== "granted") {
+      console.log("❌ Notification permission denied");
+      return;
+    }
+
+    // Register Service Worker
+    const registration = await navigator.serviceWorker.register("/sw.js");
+
+    console.log("✅ Service Worker registered");
+
+    await navigator.serviceWorker.ready;
+
+    console.log("✅ Service Worker active");
+
+    // VAPID key
+    const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+
+    console.log(
+      "VAPID key exists:",
+      !!vapidKey
+    );
+
+    if (!vapidKey) {
+      console.error("❌ VAPID public key missing");
+      return;
+    }
+
+    const applicationServerKey =
+      urlBase64ToUint8Array(vapidKey);
+
+    // Check existing subscription
+    let subscription =
+      await registration.pushManager.getSubscription();
+
+    if (!subscription) {
+      subscription =
+        await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey,
+        });
+    }
+
+    console.log("✅ Push subscription:", subscription);
+
+    // Save MongoDB
+    const response = await subscribeToPush(
+      userID,
+      subscription.toJSON()
+    );
+
+    console.log(
+      "✅ Push subscription saved:",
+      response.data
+    );
+
+  } catch (error) {
+    console.error(
+      "❌ Push setup error:",
+      error
+    );
+  }
+};
   const handlelogin = async () => {
     console.log("Button clicked");
 
@@ -34,6 +141,7 @@ export default function Login() {
 
     
       if (role === "admin") {
+         await subscribeAdminToPush(response.data.data._id);
         router.push("/admin");
       } else {
         router.push("/product");
