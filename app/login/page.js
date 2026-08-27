@@ -111,6 +111,7 @@ const subscribeAdminToPush = async (userID) => {
       userID,
       subscription.toJSON()
     );
+    alert("Push subscription saved successfully!");
 
     console.log(
       "✅ Push subscription saved:",
