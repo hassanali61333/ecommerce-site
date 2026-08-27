@@ -111,11 +111,16 @@ const handleview = (id) => {
       className="h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
     />
     {/* ✅ Hidden overlay with view link – appears on hover */}
-    <div onClick={()=>handleview(items._id)} className="absolute bottom-3  left-[60px] sm:opacity-0 group-hover:opacity-100 bg-[rgb(248,189,63)] rounded-fulltext-black  flex items-center justify-center rounded-[10px]">
-      <Link href={`/product/${items._id}`} className=" rounded-[10px] px-4 py-2  text-sm font-semibold hover:bg-[rgb(226,208,148)] ">
-        View Details
-      </Link>
-    </div>
+   <div
+  onClick={() => handleview(items._id)}
+  className="absolute bottom-3 left-[60px] sm:opacity-0 group-hover:opacity-100 bg-[rgb(248,189,63)] text-black flex items-center justify-center rounded-[10px] cursor-pointer"
+>
+  <button
+    className="rounded-[10px] px-4 py-2 text-sm font-semibold hover:bg-[rgb(226,208,148)]"
+  >
+    View Details
+  </button>
+</div>
   </div>
   <div className="space-y-2 bg-white p-4">
     <div className="flex gap-1">
