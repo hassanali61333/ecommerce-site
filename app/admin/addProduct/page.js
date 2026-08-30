@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminHeader from '../adminComp/adminHeader';
 import {  addProduct, getCollection } from '@/app/services/userService'; // ✅ service import
+import { toast } from 'react-toastify';
 
 export default function AddProduct() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function AddProduct() {
         setCollections(res.data.data); // array of { _id, name, image }
       }
     } catch (err) {
-      alert("Error fetching collections");
+      toast.error(err.response?.data?.message || "Error fetching collections");
       console.log(err.message);
     }
   };
@@ -83,13 +84,13 @@ export default function AddProduct() {
       
       // Assuming backend returns { success: true, data: product }
       if (res.data.success) {
-        alert('Product added successfully!');
+        toast.success('Product added successfully!');
         router.push("/admin/adminProduct");
       } else {
-        alert(res.data.message || 'Failed to add product');
+        toast.error(res.data.message || 'Failed to add product');
       }
     } catch (err) {
-      alert(err.response?.data?.message || err.message || 'Something went wrong');
+      toast.error(err.response?.data?.message || err.message || 'Something went wrong');
     } finally {
       setLoading(false);
     }

@@ -10,6 +10,7 @@ import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import { store } from "./redux/store";
 import { useRouter } from "next/navigation";
+import {toast} from "react-toastify"
 export default function Home() {
 
 const dispatch=useDispatch()
@@ -59,7 +60,7 @@ console.log("hassan")
 
 const handleClick = async (items) => {
   if (!loginUser) {
-    alert("login first");
+    toast.info("login first");
     return router.push("/login");
   }
 

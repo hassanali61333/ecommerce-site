@@ -111,7 +111,7 @@ const subscribeAdminToPush = async (userID) => {
       userID,
       subscription.toJSON()
     );
-    alert("Push subscription saved successfully!");
+    toast.success("Push subscription saved successfully!");
 
     console.log(
       "✅ Push subscription saved:",
@@ -130,7 +130,7 @@ const subscribeAdminToPush = async (userID) => {
 
     try {
       const response = await loginUser({ email, password });
-    alert("login sucessfull")
+    toast.success("Login successful");
     console.log("token", response.data);
       dispatch(setuser(response.data.data));
       localStorage.setItem("user",JSON.stringify(response.data.data))

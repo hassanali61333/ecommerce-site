@@ -23,9 +23,9 @@ const handleSignup =  async()=>{
 const response = await createUser({name:Name, email: Email, password: Password})
 
 if(!response){
-alert("incalid eamil or pased")
+  toast.error("Invalid email or password")
 }
-alert("signup successfull")
+toast.success("Signup successful")
 // console.log(response)
   }
   catch (err) {

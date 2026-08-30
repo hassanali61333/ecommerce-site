@@ -11,6 +11,7 @@ import { setproductID,addToCard, setuser } from "../redux/productSlice";
 import { store } from "../redux/store";
 import { PiOrangeDuotone } from "react-icons/pi";
 import { FaStar } from 'react-icons/fa';
+import { toast } from "react-toastify";
 export default function ProductDetail() {
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -68,7 +69,7 @@ console.log("dpksjfs",product)
 console.log(product)
 const handleClick = async (items) => {
   if (!loginUser) {
-    alert("login first");
+    toast.warning("login first");
     return router.push("/login");
   }
 
@@ -82,7 +83,7 @@ const handleClick = async (items) => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     if (rating === 0) {
-      alert('Please select a rating');
+      toast.error('Please select a rating');
       return;
     }
     
@@ -100,14 +101,14 @@ const data ={
       const response= await reviews(data)
       console.log("review",response)
         if(response.data.success){
-alert(response.data.message)
+          toast.success(response.data.message)
 setComment('')
 setRating(0)
         }
       
     }
     catch (err) {
-      alert("Error check console")
+      toast.error("Error check console")
       console.log(err.message)
     }
 

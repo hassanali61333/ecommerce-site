@@ -9,6 +9,7 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import { store } from "../redux/store";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 function Card() {
   const [formData, setFormData] = useState({
@@ -52,14 +53,14 @@ function Card() {
     if (!cartItem) return;
 
     if (cartItem.quantity <= 1) {
-      alert("Quantity cannot be less than 1");
+      toast.error("Quantity cannot be less than 1");
       return;
     }
     dispatch(setporductDecrement(id));
     try {
       await stockIncrease(id);
     } catch (err) {
-      alert("Server error, check console");
+      toast.error(err.response?.data?.message || "Server error, check console");
       console.log(err.message);
     }
   };
@@ -88,35 +89,35 @@ function Card() {
       const stateCard = store.getState().products.card;
       localStorage.setItem("card", JSON.stringify(stateCard));
     } else {
-      alert("No more stock available");
+      toast.error("No more stock available");
     }
   };
 
   const validateForm = () => {
     if (!formData.fullname) {
-      alert("Please enter full name");
+      toast.error("Please enter full name");
       return false;
     }
     if (!formData.phone) {
-      alert("Please enter phone number");
+      toast.error("Please enter phone number");
       return false;
     }
     if (!formData.city) {
-      alert("Please enter city");
+      toast.error("Please enter city");
       return false;
     }
     if (!formData.address) {
-      alert("Please enter full address");
+      toast.error("Please enter full address");
       return false;
     }
     if (!formData.postalcode) {
-      alert("Please enter postal code");
+      toast.error("Please enter postal code");
       return false;
     }
     // fix #1: this must stop execution, otherwise orderPayload.userID
     // crashes trying to read `_id` off a null loginUser.
     if (!loginUser) {
-      alert("Please login first");
+      toast.error("Please login first");
       return false;
     }
     return true;
@@ -147,17 +148,17 @@ function Card() {
       const response = await createOrder(orderPayload);
       if (response.data.success) {
         await stockDecrease(items);
-        alert("Order placed successfully");
+        toast.success("Order placed successfully");
         localStorage.removeItem("card");
         dispatch(setAllCard([]));
         setShowCheckout(false);
         router.push("/success");
       } else {
-        alert(response.data.message || "Order failed. Please try again.");
+        toast.error(response.data.message || "Order failed. Please try again.");
       }
     } catch (error) {
       console.error("Order error:", error);
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsPlacingOrder(false);
     }
@@ -200,12 +201,12 @@ function Card() {
         // Stripe returns an external checkout URL, so use a hard redirect.
         window.location.href = res.data.url;
       } else {
-        alert(res.data.message || "Payment failed. Please try again.");
+        toast.error(res.data.message || "Payment failed. Please try again.");
       }
     } catch (err) {
       // fix #6: give user feedback instead of only logging
       console.log(err.message);
-      alert("Payment failed, please try again.");
+      toast.error("Payment failed, please try again.");
     } finally {
       setIsStripeLoading(false);
     }

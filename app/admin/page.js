@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { allOrder,getProduct } from '@/app/services/userService'; // adjust path if needed
 import AdminHeader from './adminComp/adminHeader';
+import { toast } from 'react-toastify';
 export default function Dashboard() {
   const [stats, setStats] = useState({ orders: 0, revenue: 0 });
   const [recentOrders, setRecentOrders] = useState([]);
@@ -19,7 +20,7 @@ console.log(totalproduct)
         settotalproduct(response.data.data)
     }
     } catch (err) {
-      alert(err);
+      toast.error(err.response?.data?.message || 'Error fetching products');
     }
   };
   fetchProducts();

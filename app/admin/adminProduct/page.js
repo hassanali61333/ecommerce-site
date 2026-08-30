@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { getProduct, updateProduct, deleteProduct } from '@/app/services/userService';
 import AdminHeader from '../adminComp/adminHeader';
+import { toast } from 'react-toastify';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -85,11 +86,11 @@ export default function AdminProducts() {
       };
 
      const resp= await updateProduct(editingProduct._id, updateData);
-      alert('Product updated successfully');
+      toast.success('Product updated successfully');
       setEditingProduct(null);
       fetchProducts(); 
     } catch (err) {
-      alert(err.response?.data?.message || err.message);
+      toast.error(err.response?.data?.message || err.message);
     }
   };
 
@@ -98,10 +99,10 @@ export default function AdminProducts() {
     if (!confirm('Are you sure you want to delete this product?')) return;
     try {
       await deleteProduct(id);
-      alert('Product deleted successfully');
+      toast.success('Product deleted successfully');
       fetchProducts(); // refresh list
     } catch (err) {
-      alert('Error deleting product. Check console.');
+      toast.error(err.response?.data?.message || err.message);
       console.log(err);
     }
   };

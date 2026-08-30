@@ -11,6 +11,7 @@ import Footer from "../components/footer";
 import Navbar from "../components/navbar";
 import { setproductID,setuser } from "../redux/productSlice";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 
 
@@ -59,7 +60,7 @@ console.log("onw data", no)
   )
 const handleClick = async (items) => {
   if (!loginUser) {
-    alert("login first");
+    toast.warning("login first");
     return router.push("/login");
   }
 

@@ -48,7 +48,7 @@ export default function History() {
 
     const res= await navigator.clipboard.writeText(id)
     setmyid(id)
-    alert("text copied")
+   
     console.log("myid",myid)
     setTimeout(() => {
       setmyid("")

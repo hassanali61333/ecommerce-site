@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { allOrder, updateOrder } from '@/app/services/userService'; // import updateOrder
 import AdminHeader from '../adminComp/adminHeader';
+import { toast } from 'react-toastify';
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
@@ -58,11 +59,11 @@ export default function Orders() {
     e.preventDefault();
     try {
      await updateOrder(editingOrder._id, editForm);
-      alert('Order updated successfully');
+      toast.success('Order updated successfully');
       setEditingOrder(null);
       fetchOrders(); // refresh list
     } catch (err) {
-      alert(err.response?.data?.message || err.message);
+      toast.error(err.response?.data?.message || err.message);
     }
   };
 

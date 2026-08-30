@@ -8,6 +8,7 @@ import Link from "next/link";
 import { setproductID, setuser,addToCard  } from "../redux/productSlice";
 import { useRouter } from "next/navigation";
 import { store } from "../redux/store";
+import { toast } from "react-toastify";
 
 export default function Category() {
   const category = useSelector((state) => state.products.category);
@@ -60,7 +61,7 @@ const dispatch=useDispatch()
 
 const handleClick = async (items) => {
   if (!loginUser) {
-    alert("login first");
+    toast.warning("login first");
     return router.push("/login");
   }
 

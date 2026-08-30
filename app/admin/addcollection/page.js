@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { addCollection } from '@/app/services/userService';
 import AdminHeader from '../adminComp/adminHeader';
+import { toast } from 'react-toastify';
 
 
 export default function AddCollection() {
@@ -24,7 +25,7 @@ export default function AddCollection() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !imageFile) {
-      alert('Please fill all fields and select an image');
+      toast.warning('Please fill all fields and select an image');
       return;
     }
 
@@ -36,13 +37,13 @@ export default function AddCollection() {
     try {
       const res = await addCollection(formData);
       if (res.data.success) {
-        alert('Collection added successfully!');
+        toast.success('Collection added successfully!');
         router.push('/admin/collection');
       } else {
-        alert(res.data.message || 'Failed to add collection');
+        toast.error(res.data.message || 'Failed to add collection');
       }
     } catch (err) {
-      alert(err.response?.data?.message || 'Something went wrong');
+      toast.error(err.response?.data?.message || 'Something went wrong');
     } finally {
       setLoading(false);
     }
