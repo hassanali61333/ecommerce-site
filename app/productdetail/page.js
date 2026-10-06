@@ -117,7 +117,7 @@ setRating(0)
   };
 const myreviw = async () => {
   if (!loginUser) 
-  alert("login fisrt");
+  toast.warning("login fisrt");
   const id = loginUser._id;
   try {
     const response = await getReview(id);

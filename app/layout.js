@@ -19,6 +19,7 @@ export default function RootLayout({ children }) {
             autoClose={5000}
             closeOnClick
             pauseOnHover
+            
           />
       </Provider>
       

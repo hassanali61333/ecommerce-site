@@ -31,7 +31,7 @@ export default function AdminCustomers() {
   };
 
   const handleRoleChange = async (id, newRole) => {
-    alert(`Change role of ${id} to ${newRole}`);
+    toast.info(`Change role of ${id} to ${newRole}`);
   };
 
   const handleDelete = async (id) => {
@@ -40,11 +40,11 @@ export default function AdminCustomers() {
     try{
 
       const resp= await deleteUser(id)
-          alert(`Delete user ${id}`);
+          toast.success(`Delete user ${id}`);
           fetchCustomers()
     }
     catch (Error) {
-      alert("error check console")
+      toast.error("error check console")
       console.log(Error)
     }
 
