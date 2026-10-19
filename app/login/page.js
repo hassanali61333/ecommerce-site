@@ -10,13 +10,14 @@ import { useRouter } from "next/navigation";
 import Navbar from "../components/navbar.js";
 import Footer from "../components/footer.js";
 import { subscribeToPush } from "../services/userService.js"; // Import the subscribeToPush function
-
+import { FaEnvelope, FaEye, FaEyeSlash, FaLock, FaSpinner } from "react-icons/fa";
 export default function Login() {
   const [toggle, setToggle] = useState(false);
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
 
 
@@ -125,33 +126,29 @@ const subscribeAdminToPush = async (userID) => {
     );
   }
 };
-  const handlelogin = async () => {
-    console.log("Button clicked");
+const handlelogin = async () => {
+  if (loading) return; // double click se bachao
 
-    try {
-      const response = await loginUser({ email, password });
+  setLoading(true);
+  try {
+    const response = await loginUser({ email, password });
     toast.success("Login successful");
-    console.log("token", response.data);
-      dispatch(setuser(response.data.data));
-      localStorage.setItem("user",JSON.stringify(response.data.data))
-      const role = response.data.data.role;
-      console.log(role) 
+    dispatch(setuser(response.data.data));
+    localStorage.setItem("user", JSON.stringify(response.data.data));
+    const role = response.data.data.role;
 
-
-     
-
-    
-      if (role === "admin") {
-         await subscribeAdminToPush(response.data.data._id);
-        router.push("/admin");
-      } else {
-        router.push("/product");
-      }
-
-    } catch (err) {
-      toast.error(err.response?.data?.message || err.message || "Login failed");
+    if (role === "admin") {
+      await subscribeAdminToPush(response.data.data._id);
+      router.push("/admin");
+    } else {
+      router.push("/product");
     }
-  };
+  } catch (err) {
+    toast.error(err.response?.data?.message || err.message || "Login failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <>
@@ -190,12 +187,20 @@ const subscribeAdminToPush = async (userID) => {
           </button>
         </div>
 
-        <button
-          className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-300"
-          onClick={handlelogin}
-        >
-          Login
-        </button>
+    <button
+  className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-300 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+  onClick={handlelogin}
+  disabled={loading}
+>
+  {loading ? (
+    <>
+      <FaSpinner className="animate-spin" />
+      Logging in...
+    </>
+  ) : (
+    "Login"
+  )}
+</button>
 
         <p className="text-center text-sm text-gray-500 mt-4">
           Don't have an account?{" "}
