@@ -1,7 +1,6 @@
 "use client"
 import Link from "next/link";
 import { useState } from "react";
-import { FaEnvelope, FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
 import { loginUser } from "../services/userService.js";
 import { toast } from "react-toastify";
 import { setuser } from "../redux/productSlice.js";
@@ -10,7 +9,7 @@ import { useRouter } from "next/navigation";
 import Navbar from "../components/navbar.js";
 import Footer from "../components/footer.js";
 import { subscribeToPush } from "../services/userService.js"; // Import the subscribeToPush function
-import { FaEnvelope, FaEye, FaEyeSlash, FaLock, FaSpinner } from "react-icons/fa";
+import {     FaSpinner , FaEnvelope, FaEye, FaEyeSlash, FaLock } from "react-icons/fa";
 export default function Login() {
   const [toggle, setToggle] = useState(false);
   const [email, setemail] = useState("");
